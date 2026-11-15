@@ -90,7 +90,7 @@ class LinkService : Service() {
 
     private fun publish() {
         val c = client ?: return
-        val st = UiState(true, c.connected, c.pcName, audioOpen, switchMs, error)
+        val st = UiState(true, c.connected, c.pcName, audioOpen, switchMs, error ?: (if (!c.connected) c.lastError else null))
         AppState.state.value = st
         val key = "${st.connected}|${st.pcName}|${st.audioOpen}"
         if (key != lastKey) {
