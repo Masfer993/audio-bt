@@ -68,7 +68,7 @@ class BtClient(
     } catch (_: SecurityException) { null }
 
     private suspend fun session(dev: BluetoothDevice) {
-        adapter()?.cancelDiscovery()
+        runCatching { adapter()?.cancelDiscovery() }
         val sock = dev.createInsecureRfcommSocketToServiceRecord(Proto.SERVICE_UUID)
         try {
             sock.connect()
