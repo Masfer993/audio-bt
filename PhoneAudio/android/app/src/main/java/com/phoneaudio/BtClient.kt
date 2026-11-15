@@ -69,7 +69,7 @@ class BtClient(
 
     private suspend fun session(dev: BluetoothDevice) {
         adapter()?.cancelDiscovery()
-        val sock = dev.createInsecureRfcommSocketToServiceRecord(Proto.UUID)
+        val sock = dev.createInsecureRfcommSocketToServiceRecord(Proto.SERVICE_UUID)
         try {
             sock.connect()
             out = sock.outputStream
