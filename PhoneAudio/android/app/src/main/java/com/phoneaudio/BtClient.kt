@@ -30,6 +30,7 @@ class BtClient(
 ) {
     @Volatile var connected = false; private set
     @Volatile var pcName = ""; private set
+    @Volatile var lastError: String? = null; private set
 
     private var job: Job? = null
     private var out: OutputStream? = null
@@ -43,7 +44,7 @@ class BtClient(
             while (isActive) {
                 val dev = pick()
                 if (dev == null) { delay(2000); continue }
-                try { session(dev) } catch (e: CancellationException) { throw e } catch (_: Exception) {}
+                                try { session(dev) } catch (e: CancellationException) { throw e } catch (e: Exception) { lastError = "${e.javaClass.simpleName}: ${e.message}" }
                 if (connected) { connected = false; onLost() }
                 onChange()
                 delay(1500)
@@ -93,7 +94,7 @@ class BtClient(
                 try {
                     val hello = request("HELLO ${prefs.phoneName}", 3000)
                     if (hello?.startsWith("OK") != true) return@coroutineScope
-                    connected = true
+                    connected = true; lastError = null
                     onRemoteOpen(hello.trim().endsWith("open"))
                     onChange()
                     while (rd.isActive) {
