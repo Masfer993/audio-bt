@@ -35,7 +35,7 @@ class BtServer : IDisposable
         {
             _provider = await RfcommServiceProvider.CreateAsync(RfcommServiceId.FromUuid(Proto.ServiceUuid));
             _listener = new StreamSocketListener();
-            _listener.ConnectionReceived += (_, a) => _ = HandleAsync(a.Socket);
+            _listener.ConnectionReceived += (s, a) => { _ = HandleAsync(a.Socket); };
             await _listener.BindServiceNameAsync(_provider.ServiceId.AsString(),
                 SocketProtectionLevel.BluetoothEncryptionAllowNullAuthentication);
             _provider.StartAdvertising(_listener, true);
