@@ -18,6 +18,7 @@ class TrayContext : ApplicationContext
         menu.Items.Add(_status);
         menu.Items.Add(new ToolStripSeparator());
         menu.Items.Add("Вернуть звук на телефон", null, async (_, _) => await _audio.CloseAsync());
+        menu.Items.Add("Сбросить Bluetooth", null, async (_, _) => { await _audio.CloseAsync(); await _bt.TryStartAsync(); });
         var auto = new ToolStripMenuItem("Запускать с Windows") { Checked = Settings.AutostartEnabled, CheckOnClick = true };
         auto.Click += (_, _) => Settings.SetAutostart(auto.Checked);
         menu.Items.Add(auto);
